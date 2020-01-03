@@ -8,9 +8,6 @@ provider "aws" {
 resource "aws_vpc" "Edge" {
   cidr_block = "10.10.10.0/24"
   instance_tenancy = "dedicated"
-  lifecycle {
-      prevent_destroy = true
-  }
 
   tags = {
       Name = "Edge"
@@ -19,11 +16,8 @@ resource "aws_vpc" "Edge" {
 
 #Internet gateway for Edge VPC
 resource "aws_internet_gateway" "Edge" {
-  vpc_id = "aws_vpc.Edge.id"
+  vpc_id = "${aws_vpc.Edge.id}"
   depends_on = ["aws_vpc.Edge"]
-  lifecycle {
-      prevent_destroy = true
-  }
 
   tags = {
     Name = "Edge"
