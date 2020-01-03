@@ -1,3 +1,9 @@
+#config provider
+provider "aws" {
+  version = "~> 2.0"
+  region  = "us-east-1"
+}
+
 #creates VPC
 resource "aws_vpc" "Edge" {
   cidr_block = "10.10.10.0/24"
@@ -10,7 +16,7 @@ resource "aws_vpc" "Edge" {
 
 #Subnet for edge devices
 resource "aws_subnet" "Edge" {
-  vpc_id     = "${aws_vpc.Edge}"
+  vpc_id     = "aws_vpc.Edge"
   cidr_block = "10.10.10.0/24"
 
   tags = {
@@ -20,7 +26,7 @@ resource "aws_subnet" "Edge" {
 
 #Internet gateway for Edge VPC
 resource "aws_internet_gateway" "Edge" {
-  vpc_id = "${aws_vpc.Edge}"
+  vpc_id = "aws_vpc.Edge"
 
   tags = {
     Name = "Edge"
