@@ -43,10 +43,47 @@ resource "aws_eip" "edge-1" {
 }
 
 #creates NAT gateway
-
 resource "aws_nat_gateway" "Edge" {
   allocation_id             ="${aws_eip.edge-1.id}"
   depends_on                = [aws_internet_gateway.Edge]
   subnet_id                 = "${aws_subnet.Edge.id}"
 
 }
+
+#security group for gateway
+resource "aws_security_group" "Edge" {
+  name        = "Edge Rules"
+  description = "Allow traffic to "
+  vpc_id      = "${aws_vpc.Edge.id}"
+
+  ingress {
+    # SSH from known IPs
+    from_port   = 22
+    to_port     = 22
+    protocol    = "SSH"
+    cidr_blocks = "38.77.49.40/32"
+  }
+
+   ingress {
+    # SSH from known IPs
+    from_port   = 22
+    to_port     = 22
+    protocol    = "SSH"
+    cidr_blocks = "108.183.251.164/32"
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+    prefix_list_ids = ["pl-12c4e678"]
+  }
+}
+
+terraform {
+  backend "s3" {
+  bucket="myterraformcode"
+  key="edge/terraform.tfstate"
+  region="us-east-1"  
+  }
