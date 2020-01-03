@@ -48,5 +48,5 @@ resource "aws_nat_gateway" "Edge" {
   allocation_id             ="${aws_eip.edge-1.id}"
   depends_on                = [aws_internet_gateway.Edge]
   subnet_id                 = "${aws_subnet.Edge.id}"
-  private_ip                = "10.10.10.1"
+
 }
