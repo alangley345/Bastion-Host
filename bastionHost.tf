@@ -27,20 +27,4 @@ resource "aws_internet_gateway" "Edge" {
   }
 }
 
-#create EIP resource "aws_eip" "bar" {
-  vpc = true
-  instance                  = "${aws_instance.foo.id}"
-  associate_with_private_ip = "10.0.0.12"
-  depends_on                = ["aws_internet_gateway.gw"]
-}
-
-#creates NAT gateway
-
-resource "aws_eip" "Edge" {
-  vpc = true
-
-  instance                  = "${aws_instance.foo.id}"
-  associate_with_private_ip = "10.0.0.12"
-  depends_on                = ["aws_internet_gateway.gw"]
-}
 
