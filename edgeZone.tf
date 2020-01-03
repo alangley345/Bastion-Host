@@ -61,15 +61,7 @@ resource "aws_security_group" "Edge" {
     from_port   = 22
     to_port     = 22
     protocol    = "SSH"
-    cidr_blocks = "38.77.49.40/32"
-  }
-
-   ingress {
-    # SSH from known IPs
-    from_port   = 22
-    to_port     = 22
-    protocol    = "SSH"
-    cidr_blocks = "108.183.251.164/32"
+    cidr_blocks = ["38.77.49.40/32", "108.183.251.164/32"]
   }
 
   egress {
@@ -87,3 +79,4 @@ terraform {
   key="edge/terraform.tfstate"
   region="us-east-1"  
   }
+}
