@@ -24,5 +24,14 @@ resource "aws_internet_gateway" "Edge" {
   }
 }
 
-
+#Subnet for edge devices
+resource "aws_subnet" "Edge" {
+  vpc_id     = "${aws_vpc.Edge.id}"
+  cidr_block = "10.10.10.0/24"
+  depends_on = ["aws_vpc.Edge"]
+ 
+  tags = {
+    Name = "Edge"
+  }
+}
 
