@@ -17,7 +17,18 @@ resource "aws_vpc" "Edge" {
   }
 }
 
+#Internet gateway for Edge VPC
+resource "aws_internet_gateway" "Edge" {
+  vpc_id = "aws_vpc.Edge.id"
+  depends_on = ["aws_vpc.Edge"]
+  lifecycle {
+      prevent_destroy = true
+  }
 
+  tags = {
+    Name = "Edge"
+  }
+}
 
 
 
