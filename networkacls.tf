@@ -1,8 +1,8 @@
-resource "aws_network_acl" "Edge" {
-  vpc_id = "${aws_vpc.Edge.id}"
-  depends_on = ["aws_vpc.Edge"]
+resource "aws_default_network_acl" "Edge" {
+  default_network_acl_id = "${aws_vpc.Edge.default_network_acl_id}"
+  depends_on             = ["aws_vpc.Edge"]
 
-#egress rules
+  #egress rules
   egress {
     protocol   = "tcp"
     rule_no    = 1
@@ -21,7 +21,7 @@ resource "aws_network_acl" "Edge" {
     to_port    = 22
   }
 
-#ingress rule
+  #ingress rule
   ingress {
     protocol   = "tcp"
     rule_no    = 1

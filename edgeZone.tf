@@ -60,17 +60,11 @@ resource "aws_security_group" "Edge" {
   }
 }
 
-#keypair with my public key
-resource "aws_key_pair" "edge" {
-  key_name      = "edge-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCge4dJSyQQNnOounsn8utc7PTXIXvEzWmhUd6gVtghYuMBw/L2rnjnuyk6GEAwFsoAl2j95604/+5wvvKn8Z5vjJN1eG+6JW8Pr6l+7xC9R70bApFtj7iz9A2PwZUWZEsy+mQEF8RzOSKYrXpJCi03ieSCFS99G1rkTslHDD0I+HW+O6qTAbcTPwuoPsgAd8gVL22k8YeZU8hBNzicBf9Df+Trh89UAnKUZ6YQI93O2OkTwBod633Zh9sWahrT1szteeRO35KEMAsGVIoYTkMGrtLgCX4WeN0GtC+b/Qnr5NHwO6w1voWztgT1UD3QIxXtk/GGJ+elIQeADrDBf4f alangley345@gmail.com"
-}
-
 #set up edge instance
 resource "aws_instance" "edge" {
   ami                    = "ami-00068cd7555f543d5"
   instance_type          = "t2.micro"
-  key_name               = "edge-key"
+  key_name               = "x1Carbon"
   subnet_id              = "${aws_subnet.Edge.id}"
   vpc_security_group_ids = ["${aws_security_group.Edge.id}"]
 
