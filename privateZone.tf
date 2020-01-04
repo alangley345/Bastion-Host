@@ -1,6 +1,6 @@
 #creates VPC
 resource "aws_vpc" "Private" {
-  cidr_block       = "10.10.10.1/24"
+  cidr_block       = "10.20.20.0/24"
   instance_tenancy = "dedicated"
   tags = {
     Name = "Private"
@@ -10,7 +10,7 @@ resource "aws_vpc" "Private" {
 #Subnet for edge devices
 resource "aws_subnet" "Private" {
   vpc_id     = "${aws_vpc.Private.id}"
-  cidr_block = "10.10.10.1/24"
+  cidr_block = "10.20.20.0/24"
   depends_on = [aws_vpc.Private]
 
   tags = {
@@ -21,7 +21,7 @@ resource "aws_subnet" "Private" {
 #security group for gateway
 resource "aws_security_group" "Private" {
   name        = "Private Rules"
-  description = "Allow SSH traffic to and from this subnet "
+  description = "Allow SSH traffic to and from this subnet"
   vpc_id      = "${aws_vpc.Private.id}"
 
   ingress {
@@ -29,13 +29,14 @@ resource "aws_security_group" "Private" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.10.10.0/24"]
+    cidr_blocks = ["10.20.20.0/24"]
   }
 
   egress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.10.10.0/24"]
+    cidr_blocks = ["10.20.20.0/24"]
   }
 }
+
