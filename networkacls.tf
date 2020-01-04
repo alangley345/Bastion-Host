@@ -1,5 +1,6 @@
 resource "aws_network_acl" "Edge" {
   vpc_id = "${aws_vpc.Edge.id}"
+  depends_on = ["aws_vpc.Edge"]
 
 #egress rules
   egress {

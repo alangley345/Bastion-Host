@@ -12,7 +12,6 @@ resource "aws_vpc" "Edge" {
 resource "aws_internet_gateway" "Edge" {
   vpc_id     = "${aws_vpc.Edge.id}"
   depends_on = [aws_vpc.Edge]
-
   tags = {
     Name = "Edge"
   }
