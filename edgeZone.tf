@@ -72,6 +72,7 @@ resource "aws_instance" "edge" {
   ami                    = "ami-00068cd7555f543d5"
   instance_type          = "t2.micro"
   key_name               = "edge-key"
+  subnet_id              = "${aws_subnet.Edge.id}"
   vpc_security_group_ids = ["${aws_security_group.Edge.id}"]
 
 }
