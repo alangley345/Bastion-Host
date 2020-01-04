@@ -2,7 +2,7 @@
 resource "aws_vpc" "Private" {
   cidr_block       = "10.20.20.0/24"
   enable_dns_hostnames = true
-  instance_tenancy = "dedicated"
+  instance_tenancy = "default"
   tags = {
     Name = "Private"
   }

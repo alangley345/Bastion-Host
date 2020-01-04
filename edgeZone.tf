@@ -1,7 +1,7 @@
 #creates VPC
 resource "aws_vpc" "Edge" {
   cidr_block       = "10.10.10.0/24"
-  instance_tenancy = "dedicated"
+  instance_tenancy = "default"
 
   tags = {
     Name = "Edge"
