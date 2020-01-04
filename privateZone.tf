@@ -1,9 +1,8 @@
 #config provider
-provider "aws" {
-  version = "~> 2.0"
-  region  = "us-east-1"
+provider "var.provider" {
+  version = "var.version"
+  region  = "var.region"
 }
-
 #creates VPC
 resource "aws_vpc" "Private" {
   cidr_block       = "10.10.10.1/24"
@@ -40,17 +39,17 @@ resource "aws_security_group" "Private" {
   }
 
   egress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    cidr_blocks     = ["10.10.10.0/24"]
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.10.10.0/24"]
   }
 }
 
 terraform {
   backend "s3" {
-  bucket="myterraformcode"
-  key="edge/terraform.tfstate"
-  region="us-east-1"  
+    bucket = "myterraformcode"
+    key    = "private/terraform.tfstate"
+    region = "us-east-1"
   }
 }

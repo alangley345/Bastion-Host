@@ -44,9 +44,9 @@ resource "aws_eip" "edge-1" {
 
 #creates NAT gateway
 resource "aws_nat_gateway" "Edge" {
-  allocation_id             ="${aws_eip.edge-1.id}"
-  depends_on                = [aws_internet_gateway.Edge]
-  subnet_id                 = "${aws_subnet.Edge.id}"
+  allocation_id = "${aws_eip.edge-1.id}"
+  depends_on    = [aws_internet_gateway.Edge]
+  subnet_id     = "${aws_subnet.Edge.id}"
 
 }
 
@@ -65,18 +65,18 @@ resource "aws_security_group" "Edge" {
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
-  
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+
   }
 }
 
 terraform {
   backend "s3" {
-  bucket="myterraformcode"
-  key="edge/terraform.tfstate"
-  region="us-east-1"  
+    bucket = "myterraformcode"
+    key    = "edge/terraform.tfstate"
+    region = "us-east-1"
   }
 }
