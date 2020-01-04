@@ -60,7 +60,7 @@ resource "aws_security_group" "Edge" {
     # SSH from known IPs
     from_port   = 22
     to_port     = 22
-    protocol    = "SSH"
+    protocol    = "tcp"
     cidr_blocks = ["38.77.49.40/32", "108.183.251.164/32"]
   }
 
