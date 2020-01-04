@@ -31,20 +31,14 @@ resource "aws_subnet" "Edge" {
 
 #creating aws_eip
 resource "aws_eip" "edge-1" {
+  instance = "${aws_instance.edge.id}"
+  vpc      = true
   lifecycle {
     prevent_destroy = true
   }
 }
 
-#creates NAT gateway
-resource "aws_nat_gateway" "Edge" {
-  allocation_id = "${aws_eip.edge-1.id}"
-  depends_on    = [aws_internet_gateway.Edge]
-  subnet_id     = "${aws_subnet.Edge.id}"
-
-}
-
-#security group for gateway
+#security group for bastion host
 resource "aws_security_group" "Edge" {
   name        = "Edge Rules"
   description = "Allow SSH traffic into Edge"
@@ -75,7 +69,8 @@ resource "aws_key_pair" "edge" {
 resource "aws_instance" "edge" {
   ami            = "ami-00068cd7555f543d5"
   instance_type  = "t2.micro"
-  private_ip     = "10.10.10.2"
-  key_name       = "edge-key"
-  security_groups = ["aws_security_groups.Edge.id"]
+  #subnet_id      = "${aws_subnet.Edge.id}"
+  #private_ip     = "10.10.10.2"
+  #key_name       = "edge-key"
+  
 }
