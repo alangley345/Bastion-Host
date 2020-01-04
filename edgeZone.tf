@@ -10,7 +10,7 @@ resource "aws_vpc" "Edge" {
 
 #Internet gateway for Edge VPC
 resource "aws_internet_gateway" "Edge" {
-  vpc_id     = "${aws_vpc.Edge.id}"
+  vpc_id     = "aws_vpc.Edge.id"
   depends_on = [aws_vpc.Edge]
   tags = {
     Name = "Edge"
@@ -19,7 +19,7 @@ resource "aws_internet_gateway" "Edge" {
 
 #Subnet for edge devices
 resource "aws_subnet" "Edge" {
-  vpc_id     = "${aws_vpc.Edge.id}"
+  vpc_id     = "aws_vpc.Edge.id"
   cidr_block = "10.10.10.0/24"
   depends_on = [aws_vpc.Edge]
 
@@ -30,7 +30,7 @@ resource "aws_subnet" "Edge" {
 
 #creating aws_eip
 resource "aws_eip" "edge-1" {
-  instance = "${aws_instance.edge.id}"
+  instance = "aws_instance.edge.id"
   vpc      = true
   lifecycle {
     prevent_destroy = true
@@ -65,7 +65,7 @@ resource "aws_instance" "edge" {
   ami                    = "ami-00068cd7555f543d5"
   instance_type          = "t2.micro"
   key_name               = "x1Carbon"
-  subnet_id              = "${aws_subnet.Edge.id}"
-  vpc_security_group_ids = ["${aws_security_group.Edge.id}"]
+  subnet_id              = "aws_subnet.Edge.id"
+  vpc_security_group_ids = ["aws_security_group.Edge.id}"]
 
 }
