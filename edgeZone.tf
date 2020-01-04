@@ -1,9 +1,3 @@
-#config provider
-provider "aws" {
-  version = "~> 2.0"
-  region  = "us-east-1"
-}
-
 #creates VPC
 resource "aws_vpc" "Edge" {
   cidr_block       = "10.10.10.0/24"
@@ -53,7 +47,7 @@ resource "aws_nat_gateway" "Edge" {
 #security group for gateway
 resource "aws_security_group" "Edge" {
   name        = "Edge Rules"
-  description = "Allow traffic to "
+  description = "Allow SSH traffic into Edge"
   vpc_id      = "${aws_vpc.Edge.id}"
 
   ingress {
@@ -70,13 +64,5 @@ resource "aws_security_group" "Edge" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
 
-  }
-}
-
-terraform {
-  backend "s3" {
-    bucket = "myterraformcode"
-    key    = "edge/terraform.tfstate"
-    region = "us-east-1"
   }
 }

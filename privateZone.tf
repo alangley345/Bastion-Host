@@ -1,13 +1,7 @@
-#config provider
-provider "var.provider" {
-  version = "var.version"
-  region  = "var.region"
-}
 #creates VPC
 resource "aws_vpc" "Private" {
   cidr_block       = "10.10.10.1/24"
   instance_tenancy = "dedicated"
-
   tags = {
     Name = "Private"
   }
@@ -16,7 +10,7 @@ resource "aws_vpc" "Private" {
 #Subnet for edge devices
 resource "aws_subnet" "Private" {
   vpc_id     = "${aws_vpc.Private.id}"
-  cidr_block = "10.10.10.0/24"
+  cidr_block = "10.10.10.1/24"
   depends_on = [aws_vpc.Private]
 
   tags = {
@@ -26,8 +20,8 @@ resource "aws_subnet" "Private" {
 
 #security group for gateway
 resource "aws_security_group" "Private" {
-  name        = "Edge Rules"
-  description = "Allow traffic to "
+  name        = "Private Rules"
+  description = "Allow SSH traffic to and from this subnet "
   vpc_id      = "${aws_vpc.Private.id}"
 
   ingress {
@@ -35,7 +29,7 @@ resource "aws_security_group" "Private" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["38.77.49.40/32", "108.183.251.164/32"]
+    cidr_blocks = ["10.10.10.0/24"]
   }
 
   egress {
@@ -43,13 +37,5 @@ resource "aws_security_group" "Private" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["10.10.10.0/24"]
-  }
-}
-
-terraform {
-  backend "s3" {
-    bucket = "myterraformcode"
-    key    = "private/terraform.tfstate"
-    region = "us-east-1"
   }
 }
