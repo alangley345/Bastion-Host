@@ -2,7 +2,6 @@
 resource "aws_vpc" "Edge" {
   cidr_block       = "10.10.10.0/24"
   instance_tenancy = "default"
-
   tags = {
     Name = "Edge"
   }
@@ -22,7 +21,6 @@ resource "aws_subnet" "Edge" {
   vpc_id     = "aws_vpc.Edge.id"
   cidr_block = "10.10.10.0/24"
   depends_on = [aws_vpc.Edge]
-
   tags = {
     Name = "Edge"
   }
@@ -30,18 +28,16 @@ resource "aws_subnet" "Edge" {
 
 #creating aws_eip
 resource "aws_eip" "edge-1" {
-  instance = "aws_instance.edge.id"
+  depends_on = [aws_internet_gateway.Edge]
   vpc      = true
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 #security group for bastion host
 resource "aws_security_group" "Edge" {
   name        = "Edge Rules"
   description = "Allow SSH traffic into Edge"
-  vpc_id      = "${aws_vpc.Edge.id}"
+  vpc_id      = "aws_vpc.Edge.id"
+  depends_on = [aws_vpc.Edge]
 
   ingress {
     # SSH from known IPs
@@ -66,6 +62,6 @@ resource "aws_instance" "edge" {
   instance_type          = "t2.micro"
   key_name               = "x1Carbon"
   subnet_id              = "aws_subnet.Edge.id"
-  vpc_security_group_ids = ["aws_security_group.Edge.id}"]
-
+  vpc_security_group_ids = [aws_security_group.Edge.id]
+  depends_on             = [aws_subnet.Edge, aws_security_group.Edge]
 }

@@ -1,6 +1,6 @@
 resource "aws_default_network_acl" "Edge" {
   default_network_acl_id = "aws_vpc.Edge.default_network_acl_id"
-  depends_on             = ["aws_vpc.Edge"]
+  depends_on             = [aws_vpc.Edge]
 
   #egress rules
   egress {

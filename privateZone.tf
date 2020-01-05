@@ -10,7 +10,7 @@ resource "aws_vpc" "Private" {
 
 #Subnet for edge devices
 resource "aws_subnet" "Private" {
-  vpc_id     = "${aws_vpc.Private.id}"
+  vpc_id     = "aws_vpc.Private.id"
   cidr_block = "10.20.20.0/24"
   depends_on = [aws_vpc.Private]
 
@@ -23,7 +23,7 @@ resource "aws_subnet" "Private" {
 resource "aws_security_group" "Private" {
   name        = "Private Rules"
   description = "Allow SSH traffic to and from this subnet"
-  vpc_id      = "${aws_vpc.Private.id}"
+  vpc_id      = "aws_vpc.Private.id"
 
   ingress {
     # SSH from known IPs
