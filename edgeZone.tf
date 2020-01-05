@@ -59,27 +59,34 @@ resource "aws_security_group" "Edge" {
   description = "Allow SSH traffic into Edge"
   vpc_id      = aws_vpc.Edge.id
   depends_on = [aws_internet_gateway.Edge]
-  /*
+  
+  # SSH from all
   ingress {
-    # SSH from known IPs
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["38.77.49.40/32", "108.183.251.164/32"]
-  }
-  */
-
-  ingress {
-    # Allow ping
-    from_port   = 8
+    from_port   = 0
     to_port     = 0
-    protocol    = "icmp"
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  # Outbound All
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  #allow ICMP
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  #allow ICMP
   egress {
-    from_port   = 8
-    to_port     = 0
+    from_port   = -1
+    to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
 

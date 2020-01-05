@@ -7,7 +7,7 @@ resource "aws_default_network_acl" "Edge" {
     rule_no = 100
     protocol = "icmp"
     from_port = -1
-    to_port = -1
+    to_port   = -1
     icmp_type = -1
     icmp_code = -1
     cidr_block = "0.0.0.0/0"
@@ -15,21 +15,12 @@ resource "aws_default_network_acl" "Edge" {
   }
 
   egress {
-    protocol   = "tcp"
+    protocol   = "-1"
     rule_no    = 150
     action     = "allow"
-    cidr_block = "38.77.49.40/32"
-    from_port  = 22
-    to_port    = 22
-  }
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "108.183.251.164/32"
-    from_port  = 22
-    to_port    = 22
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
   }
 
   #ingress rule
@@ -37,7 +28,7 @@ resource "aws_default_network_acl" "Edge" {
     rule_no = 100
     protocol = "icmp"
     from_port = -1
-    to_port = -1
+    to_port   = -1
     icmp_type = -1
     icmp_code = -1
     cidr_block = "0.0.0.0/0"
@@ -46,20 +37,12 @@ resource "aws_default_network_acl" "Edge" {
 
 
   ingress {
-    protocol   = "tcp"
+    protocol   = "-1"
     rule_no    = 150
     action     = "allow"
-    cidr_block = "38.77.49.40/32"
-    from_port  = 22
-    to_port    = 22
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
   }
 
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "108.183.251.164/32"
-    from_port  = 22
-    to_port    = 22
-  }
 }
