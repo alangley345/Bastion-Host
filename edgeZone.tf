@@ -50,17 +50,17 @@ resource "aws_security_group" "Edge" {
   */
 
   ingress {
-    # ICMP test
-    from_port   = 0
+    # Allow ping
+    from_port   = 8
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port   = 0
+    from_port   = 8
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
 
   }
