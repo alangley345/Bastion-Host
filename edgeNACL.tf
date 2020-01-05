@@ -37,12 +37,12 @@ resource "aws_default_network_acl" "Edge" {
 
 
   ingress {
-    protocol   = "-1"
+    protocol   = "tcp"
     rule_no    = 150
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
+    from_port  = 22
+    to_port    = 22
   }
 
 }
