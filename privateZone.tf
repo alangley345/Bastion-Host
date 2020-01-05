@@ -1,3 +1,4 @@
+/*
 #creates VPC
 resource "aws_vpc" "Private" {
   cidr_block           = "10.20.20.0/24"
@@ -41,3 +42,4 @@ resource "aws_security_group" "Private" {
   }
 }
 
+*/
