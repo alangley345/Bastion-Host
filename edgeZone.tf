@@ -34,11 +34,11 @@ resource "aws_eip" "Edge" {
 }
 
 #create route table for VPC
-resource "aws_route_table" "r" {
+resource "aws_route_table" "Edge" {
   vpc_id = aws_vpc.Edge.id
   depends_on   = [aws_internet_gateway.Edge, aws_vpc.Edge]
   route {
-    cidr_block = "10.10.10.0/24"
+    cidr_block = "0.0.0.0/24"
     gateway_id = aws_internet_gateway.Edge.id
   }
 
@@ -46,6 +46,12 @@ resource "aws_route_table" "r" {
     Name = "Edge"
   }
 }
+
+resource "aws_main_route_table_association" "Edge" {
+  vpc_id         = aws_vpc.Edge.id
+  route_table_id = aws_route_table.Edge.id
+}
+
 
 #security group for bastion host
 resource "aws_security_group" "Edge" {
