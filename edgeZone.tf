@@ -17,6 +17,16 @@ resource "aws_subnet" "Edge" {
   }
 }
 
+#Subnet for edge devices
+resource "aws_subnet" "Private" {
+  vpc_id     = aws_vpc.Edge.id
+  cidr_block = "10.20.20.0/24"
+  depends_on = [aws_vpc.Edge]
+  tags = {
+    Name = "Private"
+  }
+
+
 #Internet gateway for Edge VPC
 resource "aws_internet_gateway" "Edge" {
   vpc_id     = aws_vpc.Edge.id
@@ -38,7 +48,7 @@ resource "aws_route_table" "Edge" {
   vpc_id = aws_vpc.Edge.id
   depends_on   = [aws_internet_gateway.Edge, aws_vpc.Edge]
   route {
-    cidr_block = "0.0.0.0/24"
+    cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.Edge.id
   }
 
