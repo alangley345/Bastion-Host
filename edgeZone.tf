@@ -1,6 +1,6 @@
 #creates VPC
 resource "aws_vpc" "Edge" {
-  cidr_block       = "10.10.10.0/24"
+  cidr_block       = "10.0.0.0/22"
   instance_tenancy = "default"
   tags = {
     Name = "Edge"
@@ -10,22 +10,22 @@ resource "aws_vpc" "Edge" {
 #Subnet for edge devices
 resource "aws_subnet" "Edge" {
   vpc_id     = aws_vpc.Edge.id
-  cidr_block = "10.10.10.0/24"
+  cidr_block = "10.0.0.0/24"
   depends_on = [aws_vpc.Edge]
   tags = {
     Name = "Edge"
   }
 }
 
-#Subnet for edge devices
+#Subnet for private devices
 resource "aws_subnet" "Private" {
   vpc_id     = aws_vpc.Edge.id
-  cidr_block = "10.20.20.0/24"
+  cidr_block = "10.0.1.0/24"
   depends_on = [aws_vpc.Edge]
   tags = {
     Name = "Private"
   }
-
+}
 
 #Internet gateway for Edge VPC
 resource "aws_internet_gateway" "Edge" {
@@ -105,7 +105,7 @@ resource "aws_security_group" "Edge" {
 
 #security group for private 
 resource "aws_security_group" "Private" {
-  name        = "Edge Rules"
+  name        = "Private Rules"
   description = "Allow SSH traffic into Private"
   vpc_id      = aws_vpc.Edge.id
   
@@ -114,7 +114,7 @@ resource "aws_security_group" "Private" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.10.10.0/24"]
+    cidr_blocks = ["10.0.0.0/24"]
   }
   
   # Outbound All
@@ -122,7 +122,7 @@ resource "aws_security_group" "Private" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.10.10.0/24"]
+    cidr_blocks = ["10.0.0.0/24"]
   }
 
   #allow ICMP
@@ -148,12 +148,12 @@ resource "aws_instance" "edge" {
   instance_type          = "t2.micro"
   key_name               = "x1Carbon"
   subnet_id              = aws_subnet.Edge.id
-  vpc_security_group_ids = [aws_security_group.Edge.id, aws_security_group.Private.id]
+  vpc_security_group_ids = [aws_security_group.Edge.id]
   depends_on             = [aws_subnet.Edge, aws_security_group.Edge]
 }
 
 #set up private instance
-resource "aws_instance" "private" {
+resource "aws_instance" "private"{
   ami                    = "ami-00068cd7555f543d5"
   instance_type          = "t2.micro"
   key_name               = "x1Carbon"
