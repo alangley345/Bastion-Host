@@ -103,12 +103,61 @@ resource "aws_security_group" "Edge" {
   }
 }
 
+#security group for private 
+resource "aws_security_group" "Private" {
+  name        = "Edge Rules"
+  description = "Allow SSH traffic into Private"
+  vpc_id      = aws_vpc.Edge.id
+  
+  # SSH from all
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.10.10.0/24"]
+  }
+  
+  # Outbound All
+  egress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.10.10.0/24"]
+  }
+
+  #allow ICMP
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  #allow ICMP
+  egress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+  }
+}
+
 #set up edge instance
 resource "aws_instance" "edge" {
   ami                    = "ami-00068cd7555f543d5"
   instance_type          = "t2.micro"
   key_name               = "x1Carbon"
   subnet_id              = aws_subnet.Edge.id
-  vpc_security_group_ids = [aws_security_group.Edge.id]
+  vpc_security_group_ids = [aws_security_group.Edge.id, aws_security_group.Private.id]
   depends_on             = [aws_subnet.Edge, aws_security_group.Edge]
+}
+
+#set up private instance
+resource "aws_instance" "private" {
+  ami                    = "ami-00068cd7555f543d5"
+  instance_type          = "t2.micro"
+  key_name               = "x1Carbon"
+  subnet_id              = aws_subnet.Private.id
+  vpc_security_group_ids = [aws_security_group.Private.id]
+  depends_on             = [aws_subnet.Private, aws_security_group.Private]
 }
